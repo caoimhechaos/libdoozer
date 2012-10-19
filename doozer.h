@@ -68,6 +68,7 @@ protected:
 class Conn {
 public:
 	// Various methods of connecting.
+	Conn();
 	Conn(std::string addr);
 	Conn(std::string uri, std::string boot_uri);
 	Conn(QString addr);
