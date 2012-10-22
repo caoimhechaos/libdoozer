@@ -123,6 +123,16 @@ public:
 	// Returns the current revision of the store in "rev".
 	virtual Error* Rev(int64_t* rev);
 
+	// Read up to "lim" names from "dir", at revision "rev", into vector
+	// "names". Names are read in lexicographical order, starting at
+	// position "off". A negative "lim" means to read until the end.  "rev"
+	// should be obtained from the Rev() method, since directories have
+	// their own magic revision ID.
+	virtual Error* Getdir(std::string dir, int64_t rev, int32_t off,
+			int lim, std::vector<std::string>* names);
+	virtual Error* Getdir(QString dir, int64_t rev, int32_t off, int lim,
+			QVector<QString>* names);
+
 	// TODO(tonnerre): Port the more complex functions.
 
 private:
