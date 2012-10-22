@@ -104,7 +104,7 @@ Conn::init(QString uri, QString buri)
 		return;
 	}
 
-	p.setEncodedQuery(uri.mid(sizeof(DOOZER_URI_PREFIX)).toUtf8());
+	p.setEncodedQuery(uri.mid(sizeof(DOOZER_URI_PREFIX)-1).toUtf8());
 
 	QString name = p.queryItemValue("cn");
 	if (name.length() > 0 && buri.length() > 0)
@@ -127,7 +127,7 @@ Conn::init(QString uri, QString buri)
 
 	int i = qrand() % addrs.length();
 	int pos = addrs[i].lastIndexOf(':');
-	host = addrs[i].left(pos - 1);
+	host = addrs[i].left(pos);
 	port = addrs[i].mid(pos + 1);
 
 	conn_ = new QTcpSocket();
@@ -160,14 +160,18 @@ Conn::init(QString uri, QString buri)
 Error*
 Conn::send(const ::google::protobuf::Message& msg)
 {
-	std::string data = msg.SerializeAsString();
-	uint32_t len = htonl(data.length());
+	std::string msgstr = msg.SerializeAsString();
+	uint32_t len = htonl(msgstr.length());
+	QByteArray buf = QByteArray::fromRawData((char*) &len, 4);
 
-	if (conn_->write((char*) &len, 4) != 4)
+	buf.push_back(msgstr.c_str());
+
+	if (conn_->write(buf) != buf.length())
 		return new Error(conn_->errorString());
 
-	if (conn_->write(data.c_str(), data.length()) != data.length())
-		return new Error(conn_->errorString());
+	if (!conn_->waitForBytesWritten())
+		return new Error(QString("Unable to wait for the written byte: ") +
+				conn_->errorString());
 
 	return 0;
 }
@@ -175,13 +179,17 @@ Conn::send(const ::google::protobuf::Message& msg)
 Error*
 Conn::recv(::google::protobuf::Message* msg)
 {
+	if (!conn_->waitForReadyRead(30000))
+		return new Error(QString("Timed out waiting for response"));
 	QByteArray buf = conn_->read(4);
+	uint32_t* lenp;
 	uint32_t len;
 
 	if (buf.length() != 4)
 		return new Error(conn_->errorString());
 
-	len = ntohl(*((uint32_t*) buf.data()));
+	lenp = (uint32_t*) buf.data();
+	len = ntohl(*lenp);
 	msg->Clear();
 
 	buf = conn_->read(len);
