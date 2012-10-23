@@ -100,6 +100,37 @@ protected:
 	bool isdir_;
 };
 
+// Doozer file modification event
+class Event {
+public:
+	Event();
+	Event(int64_t rev, QString path, QByteArray body, uint32_t flags);
+
+	// Revision the file was written at.
+	int64_t Rev();
+	void Rev(int64_t newrev);
+
+	// Path of the modified file.
+	QString QPath();
+	std::string Path();
+	void QPath(QString newpath);
+
+	// Contents the file was set to.
+	QByteArray QBody();
+	std::string Body();
+	void QBody(QByteArray newbody);
+
+	// Flags.
+	uint32_t Flags();
+	void Flags(uint32_t newflags);
+
+private:
+	int64_t rev_;
+	QString path_;
+	QByteArray body_;
+	uint32_t flags_;
+};
+
 // Doozer connection type.
 class Conn {
 public:
@@ -181,6 +212,11 @@ public:
 			int lim, QVector<FileInfo>* info);
 	virtual Error* Getdirinfo(std::string dir, int64_t rev, int32_t off,
 			int lim, std::vector<FileInfo>* info);
+
+	// Waits for modification events of the expression given as "glob",
+	// after revision "rev" and stores the event in "ev".
+	virtual Error* Wait(QString glob, int64_t rev, Event* ev);
+	virtual Error* Wait(std::string glob, int64_t rev, Event* ev);
 
 	// TODO(caoimhe): Port the more complex functions.
 
