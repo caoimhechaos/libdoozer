@@ -64,6 +64,36 @@ protected:
 	QString message_;
 };
 
+// Informatiou about a specific file in the Doozer tree.
+class FileInfo {
+public:
+	FileInfo(QString name, int len, int64_t rev, bool is_set, bool is_dir);
+	virtual ~FileInfo();
+
+	// Retrieve the name contained in the fileinfo object.
+	std::string Name();
+	QString Name();
+
+	// Length of the file, if appropriate.
+	int Len();
+
+	// Revision the file was written at.
+	int64_t Rev();
+
+	// If the file was found at all.
+	bool IsSet();
+
+	// If the file is a directory.
+	bool IsDir();
+
+protected:
+	QString name_;
+	int len_;
+	int64_t rev_;
+	bool isset_;
+	bool isdir_;
+};
+
 // Doozer connection type.
 class Conn {
 public:
@@ -132,6 +162,11 @@ public:
 			int lim, std::vector<std::string>* names);
 	virtual Error* Getdir(QString dir, int64_t rev, int32_t off, int lim,
 			QVector<QString>* names);
+
+	// Returns metadata about the file or directory at "path", in revision
+	// "rev". The result is written to "info".
+	virtual Error* Statinfo(int64_t rev, std::string path, Fileinfo* info);
+	virtual Error* Statinfo(int64_t rev, QString path, Fileinfo* info);
 
 	// TODO(tonnerre): Port the more complex functions.
 
