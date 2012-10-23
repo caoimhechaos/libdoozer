@@ -1,0 +1,21 @@
+Source: libdoozer
+Priority: extra
+Maintainer: Caoimhe Chaos <caoimhechaos@protonmail.com>
+Build-Depends: debhelper (>= 8.0.0), autotools-dev
+Standards-Version: 3.9.3
+Section: libs
+Homepage: http://base.ancient-solutions.com/
+Vcs-Git: http://git.ancient-solutions.com/base/libdoozer.git
+Vcs-Browser: http://git.ancient-solutions.com/cgi-bin/gitweb.cgi?p=base/libdoozer.git;a=summary
+
+Package: libdoozer-dev
+Section: libdevel
+Architecture: any
+Depends: libdoozer0 (= ${binary:Version})
+Description: Development headers for the Doozer client library.
+
+Package: libdoozer0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Doozer lock service client library written in C++.
