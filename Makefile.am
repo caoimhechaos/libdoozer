@@ -4,7 +4,7 @@ lib_LTLIBRARIES=	libdoozer.la
 noinst_PROGRAMS=	ping
 
 libdoozer_la_SOURCES=	msg.pb.h msg.pb.cc error.cc conn.cc baseops.cc	\
-			dirops.cc
+			dirops.cc wait.cc
 libdoozer_la_LDFLAGS=	-version-info ${LIBRARY_VERSION}
 
 ping_SOURCES=		ping.c
