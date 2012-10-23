@@ -62,6 +62,8 @@ AC_CHECK_LIB([QtNetwork], [main],
 	[QT_LIBS="$QT_LIBS -lQtNetwork"])
 AC_CHECK_LIB([QtCore], [main],
 	[QT_LIBS="$QT_LIBS -lQtCore"])
+AC_CHECK_LIB([pthread], [pthread_once],
+	     [AC_LIBS="$AC_LIBS -lpthread"])
 LIBS="$LIBS $AC_LIBS $PROTO_LIBS $GLOG_LIBS"
 AC_SUBST(GTEST_LIBS)
 AC_SUBST(QT_LIBS)
