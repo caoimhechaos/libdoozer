@@ -42,6 +42,53 @@
 
 namespace doozer {
 
+#define MISSING		(-1)
+#define CLOBBER		(-2)
+#define DIRECTORY	(-3)
+#define NOP		(-4)
+
+FileInfo::FileInfo(QString name, int len, int64_t rev, bool is_set,
+		bool is_dir)
+: name_(name), len_(len), rev_(rev), isset_(is_set), isdir_(is_dir)
+{
+}
+
+std::string
+FileInfo::Name()
+{
+	return name_.toStdString();
+}
+
+QString
+FileInfo::Name()
+{
+	return name_;
+}
+
+int
+FileInfo::Len()
+{
+	return len_;
+}
+
+int64_t
+FileInfo::Rev()
+{
+	return rev_;
+}
+
+bool
+FileInfo::IsSet()
+{
+	return isset_;
+}
+
+bool
+FileInfo::IsDir()
+{
+	return isdir_;
+}
+
 Error*
 Conn::Getdir(QString dir, int64_t rev, int32_t off, int lim,
 		QVector<QString>* names)
@@ -100,6 +147,28 @@ Conn::Getdir(std::string dir, int64_t rev, int32_t off, int lim,
 	for (auto it : qres)
 		names->push_back(it.toStdString());
 
+	return 0;
+}
+
+Error*
+Conn::Statinfo(int64_t rev, std::string path, Fileinfo* info)
+{
+	return Statinfo(rev, QString(path.c_str()), info);
+}
+
+Error*
+Conn::Statinfo(int64_t rev, QString path, Fileinfo** info)
+{
+	Error* err;
+	int len;
+	int64_t filerev;
+
+	err = Stat(path, &rev, &len, &filerev);
+	if (err)
+		return err;
+
+	*info = new FileInfo(QString(basename(path.data())), len, filerev,
+			true, (filerev == DIRECTORY));
 	return 0;
 }
 
