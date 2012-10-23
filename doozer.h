@@ -67,24 +67,30 @@ protected:
 // Informatiou about a specific file in the Doozer tree.
 class FileInfo {
 public:
+	FileInfo();
 	FileInfo(QString name, int len, int64_t rev, bool is_set, bool is_dir);
 	virtual ~FileInfo();
 
 	// Retrieve the name contained in the fileinfo object.
 	std::string Name();
-	QString Name();
+	QString QName();
+	void QName(QString newname);
 
 	// Length of the file, if appropriate.
 	int Len();
+	void Len(int newlen);
 
 	// Revision the file was written at.
 	int64_t Rev();
+	void Rev(int64_t newrev);
 
 	// If the file was found at all.
 	bool IsSet();
+	void IsSet(bool newset);
 
 	// If the file is a directory.
 	bool IsDir();
+	void IsDir(bool newdir);
 
 protected:
 	QString name_;
@@ -165,8 +171,16 @@ public:
 
 	// Returns metadata about the file or directory at "path", in revision
 	// "rev". The result is written to "info".
-	virtual Error* Statinfo(int64_t rev, std::string path, Fileinfo* info);
-	virtual Error* Statinfo(int64_t rev, QString path, Fileinfo* info);
+	virtual Error* Statinfo(int64_t rev, std::string path, FileInfo** info);
+	virtual Error* Statinfo(int64_t rev, QString path, FileInfo** info);
+
+	// Retrieves information about the next "lim" directory entries of
+	// "dir", starting at "off" revision "rev" and placing the result
+	// into "info".
+	virtual Error* Getdirinfo(QString dir, int64_t rev, int32_t off,
+			int lim, QVector<FileInfo>* info);
+	virtual Error* Getdirinfo(std::string dir, int64_t rev, int32_t off,
+			int lim, std::vector<FileInfo>* info);
 
 	// TODO(tonnerre): Port the more complex functions.
 

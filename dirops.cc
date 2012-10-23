@@ -37,6 +37,9 @@
 #include <QtCore/QString>
 #include <QtCore/QVector>
 
+#include <libgen.h>
+#include <string.h>
+
 #include "msg.pb.h"
 #include "doozer.h"
 
@@ -47,9 +50,19 @@ namespace doozer {
 #define DIRECTORY	(-3)
 #define NOP		(-4)
 
+
+FileInfo::FileInfo()
+: len_(0), rev_(0), isset_(false), isdir_(false)
+{
+}
+
 FileInfo::FileInfo(QString name, int len, int64_t rev, bool is_set,
 		bool is_dir)
 : name_(name), len_(len), rev_(rev), isset_(is_set), isdir_(is_dir)
+{
+}
+
+FileInfo::~FileInfo()
 {
 }
 
@@ -60,9 +73,15 @@ FileInfo::Name()
 }
 
 QString
-FileInfo::Name()
+FileInfo::QName()
 {
 	return name_;
+}
+
+void
+FileInfo::QName(QString newname)
+{
+	name_ = newname;
 }
 
 int
@@ -71,10 +90,22 @@ FileInfo::Len()
 	return len_;
 }
 
+void
+FileInfo::Len(int newlen)
+{
+	len_ = newlen;
+}
+
 int64_t
 FileInfo::Rev()
 {
 	return rev_;
+}
+
+void
+FileInfo::Rev(int64_t newrev)
+{
+	rev_ = newrev;
 }
 
 bool
@@ -83,10 +114,22 @@ FileInfo::IsSet()
 	return isset_;
 }
 
+void
+FileInfo::IsSet(bool newset)
+{
+	isset_ = newset;
+}
+
 bool
 FileInfo::IsDir()
 {
 	return isdir_;
+}
+
+void
+FileInfo::IsDir(bool newdir)
+{
+	isdir_ = newdir;
 }
 
 Error*
@@ -144,31 +187,89 @@ Conn::Getdir(std::string dir, int64_t rev, int32_t off, int lim,
 
 	names->clear();
 
-	for (auto it : qres)
+	for (QString it : qres)
 		names->push_back(it.toStdString());
 
 	return 0;
 }
 
 Error*
-Conn::Statinfo(int64_t rev, std::string path, Fileinfo* info)
+Conn::Statinfo(int64_t rev, std::string path, FileInfo** info)
 {
 	return Statinfo(rev, QString(path.c_str()), info);
 }
 
 Error*
-Conn::Statinfo(int64_t rev, QString path, Fileinfo** info)
+Conn::Statinfo(int64_t rev, QString path, FileInfo** info)
 {
 	Error* err;
-	int len;
+	int len, slashpos;
 	int64_t filerev;
+	QString shortname;
+
+	if (path.endsWith('/'))
+		path = path.left(path.length() - 1);
+
+	slashpos = path.lastIndexOf('/');
+	if (slashpos > 0)
+		shortname = path.right(path.length() - slashpos);
+	else
+		shortname = path;
 
 	err = Stat(path, &rev, &len, &filerev);
 	if (err)
 		return err;
 
-	*info = new FileInfo(QString(basename(path.data())), len, filerev,
-			true, (filerev == DIRECTORY));
+	*info = new FileInfo(shortname, len, filerev, true,
+			(filerev == DIRECTORY));
+	return 0;
+}
+
+Error*
+Conn::Getdirinfo(QString dir, int64_t rev, int32_t off, int lim,
+		QVector<FileInfo>* info)
+{
+	QVector<QString> names;
+	Error* err = Getdir(dir, rev, off, lim, &names);
+
+	if (err)
+		return err;
+
+	if (!dir.endsWith('/'))
+		dir += "/";
+
+	info->clear();
+
+	for (QString name : names)
+	{
+		FileInfo* fp = 0;
+
+		err = Statinfo(rev, dir + name, &fp);
+		if (err && !fp)
+			fp = new FileInfo(name, 0, 0, false, false);
+		info->push_back(*fp);
+		delete fp;
+	}
+
+	return 0;
+}
+
+Error*
+Conn::Getdirinfo(std::string dir, int64_t rev, int32_t off, int lim,
+		std::vector<FileInfo>* info)
+{
+	QVector<FileInfo> qinfo;
+	QString qdir(dir.c_str());
+	Error* err = Getdirinfo(qdir, rev, off, lim, &qinfo);
+
+	if (err)
+		return err;
+
+	info->clear();
+
+	for (FileInfo it : qinfo)
+		info->push_back(it);
+
 	return 0;
 }
 
