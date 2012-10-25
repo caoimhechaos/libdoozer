@@ -59,33 +59,33 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	if (argv[1] == "add" && argc >= 3)
+	if (!strcmp(argv[1], "add") && argc >= 3)
 	{
 		QString path(argv[2]);
 		add(path);
 	}
-	else if (argv[1] == "del" && argc >= 4)
+	else if (!strcmp(argv[1], "del") && argc >= 4)
 	{
 		QString path(argv[2]);
 		QString revstr(argv[3]);
 		uint64_t rev = revstr.toLongLong();
 		del(path, rev);
 	}
-	else if (argv[1] == "get" && argc >= 3)
+	else if (!strcmp(argv[1], "get") && argc >= 3)
 	{
 		QString path(argv[2]);
 		get(path);
 	}
-	else if (argv[1] == "nop")
+	else if (!strcmp(argv[1], "nop"))
 	{
 		nop();
 	}
-	else if (argv[1] == "rev" && argc >= 3)
+	else if (!strcmp(argv[1], "rev") && argc >= 3)
 	{
 		QString path(argv[2]);
 		rev(path);
 	}
-	else if (argv[1] == "set" && argc >= 5)
+	else if (!strcmp(argv[1], "set") && argc >= 5)
 	{
 		QString path(argv[2]);
 		QString revstr(argv[3]);
@@ -93,22 +93,22 @@ int main(int argc, char** argv)
 		uint64_t rev = revstr.toLongLong();
 		set(path, rev, data);
 	}
-	else if (argv[1] == "stat" && argc >= 3)
+	else if (!strcmp(argv[1], "stat") && argc >= 3)
 	{
 		QString path(argv[2]);
 		stat(path);
 	}
-	else if (argv[1] == "touch" && argc >= 3)
+	else if (!strcmp(argv[1], "touch") && argc >= 3)
 	{
 		QString path(argv[2]);
 		touch(path);
 	}
-	else if (argv[1] == "wait" && argc >= 3)
+	else if (!strcmp(argv[1], "wait") && argc >= 3)
 	{
 		QString glob(argv[2]);
 		wait(glob);
 	}
-	else if (argv[1] == "watch" && argc >= 3)
+	else if (!strcmp(argv[1], "watch") && argc >= 3)
 	{
 		QString glob(argv[2]);
 		watch(glob);
