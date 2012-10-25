@@ -34,6 +34,8 @@
 
 #include "cli/cli.h"
 
+doozer::Conn* conn;
+
 void usage()
 {
 	std::cerr << "Each command takes zero or more options and zero or "

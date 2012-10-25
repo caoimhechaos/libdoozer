@@ -49,7 +49,7 @@ Conn::Set(QString file, int64_t oldRev, int64_t* newRev, QByteArray body)
 }
 
 Error*
-Conn::Set(std::string file, int64_t oldRev, int64_t* newRev, char *body,
+Conn::Set(std::string file, int64_t oldRev, int64_t* newRev, const char *body,
 		size_t len)
 {
 	Error* err;

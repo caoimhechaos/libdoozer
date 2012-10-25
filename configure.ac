@@ -3,7 +3,7 @@
 
 AC_PREREQ([2.65])
 AC_INIT([libdoozer], [0.1], [tonnerre@ancient-solutions.com])
-AC_CONFIG_SRCDIR([conn.cc])
+AC_CONFIG_SRCDIR([doozer.h])
 AC_CONFIG_HEADERS([config.h])
 
 AM_INIT_AUTOMAKE
@@ -77,5 +77,5 @@ AC_CHECK_HEADERS([QtNetwork/QTcpSocket])
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile cli/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile cli/Makefile])
 AC_OUTPUT
