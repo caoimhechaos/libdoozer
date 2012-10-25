@@ -12,6 +12,8 @@ libdoozer_la_LIBADD=	@QT_LIBS@
 ping_SOURCES=		ping.c
 ping_LDADD=		${lib_LTLIBRARIES} @QT_LIBS@
 
+SUBDIRS=		cli
+
 CLEANFILES=	msg.pb.h msg.pb.cc
 
 msg.pb.cc msg.pb.h: msg.proto

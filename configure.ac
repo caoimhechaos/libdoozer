@@ -77,5 +77,5 @@ AC_CHECK_HEADERS([QtNetwork/QTcpSocket])
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([Makefile cli/Makefile])
 AC_OUTPUT
