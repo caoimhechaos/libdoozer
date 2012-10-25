@@ -33,7 +33,7 @@
 
 #include "cli/cli.h"
 
-void del(QString path, uint64_t rev)
+void del(QString path, int64_t rev)
 {
 	doozer::Error* err = conn->Del(path, rev);
 	if (err)
