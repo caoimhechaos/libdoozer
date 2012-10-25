@@ -14,6 +14,12 @@ Architecture: any
 Depends: libdoozer0 (= ${binary:Version})
 Description: Development headers for the Doozer client library.
 
+Package: libdoozer-bin
+Section: libdevel
+Architecture: any
+Depends: libdoozer0 (= ${binary:Version})
+Description: Programs which ship with libdoozer.
+
 Package: libdoozer0
 Section: libs
 Architecture: any
