@@ -43,7 +43,7 @@ void usage()
 		<< "In addition, there are some global options that can be "
 		<< "used with any command." << std::endl
 		<< "The exit status is 0 on success, 1 for a rev mismatch, "
-		<< "and 2 otherwise.";
+		<< "and 2 otherwise." << std::endl;
 
 	exit(1);
 }
