@@ -159,7 +159,7 @@ public:
 	// current revision of the file, and "newRev" will be set to the
 	// revision number created by the mutation.
 	virtual Error* Set(std::string file, int64_t oldRev, int64_t* newRev,
-			char *body, size_t len);
+			const char *body, size_t len);
 	virtual Error* Set(QString file, int64_t oldRev, int64_t* newRev,
 			QByteArray body);
 
