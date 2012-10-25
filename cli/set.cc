@@ -33,7 +33,7 @@
 
 #include "cli/cli.h"
 
-void add(QString path, int64_t rev, QByteArray contents)
+void set(QString path, int64_t rev, QByteArray contents)
 {
 	int64_t newrev;
 	doozer::Error* err = conn->Set(path, rev, &newrev, contents);
