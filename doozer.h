@@ -144,6 +144,11 @@ public:
 	// Disconnect and dispose of the connection.
 	virtual ~Conn();
 
+	// Sets the "timeout" for the operations. A timeout of -1 means
+	// operations don't time out (which is helpful if you want to e.g. wait
+	// indefinitely for updates).
+	virtual void SetTimeout(int timeout);
+
 	// Whether or not the connection was established successfully.
 	virtual bool IsValid();
 
@@ -228,6 +233,7 @@ private:
 	// Error which may have occured during initialization
 	Error* error_;
 	bool valid_;
+	int timeout_;
 
 	// Connection to the Doozer service.
 	QTcpSocket* conn_;

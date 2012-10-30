@@ -97,6 +97,7 @@ Conn::init(QString uri, QString buri)
 
 	error_ = 0;
 	valid_ = false;
+	timeout_ = 30000;
 
 	if (!uri.startsWith(doozer_uri_prefix))
 	{
@@ -169,7 +170,7 @@ Conn::send(const ::google::protobuf::Message& msg)
 	if (conn_->write(buf) != buf.length())
 		return new Error(conn_->errorString());
 
-	if (!conn_->waitForBytesWritten())
+	if (!conn_->waitForBytesWritten(timeout_))
 		return new Error(QString("Unable to wait for the written byte: ") +
 				conn_->errorString());
 
@@ -179,7 +180,7 @@ Conn::send(const ::google::protobuf::Message& msg)
 Error*
 Conn::recv(::google::protobuf::Message* msg)
 {
-	if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(30000))
+	if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(timeout_))
 		return new Error(QString("Timed out waiting for response"));
 	QByteArray buf = conn_->read(4);
 	uint32_t* lenp;
@@ -194,8 +195,10 @@ Conn::recv(::google::protobuf::Message* msg)
 
 	if (len > 0)
 	{
-		if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(30000))
-			return new Error(QString("Timed out waiting for response"));
+		if (!conn_->bytesAvailable() &&
+				!conn_->waitForReadyRead(timeout_))
+			return new Error(QString("Timed out waiting for "
+						"response"));
 
 		buf = conn_->read(len);
 		if (buf.length() != len)
@@ -206,6 +209,12 @@ Conn::recv(::google::protobuf::Message* msg)
 	}
 
 	return 0;
+}
+
+void
+Conn::SetTimeout(int timeout)
+{
+	timeout_ = timeout;
 }
 
 Error*
