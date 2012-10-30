@@ -187,8 +187,9 @@ Conn::Getdir(std::string dir, int64_t rev, int32_t off, int lim,
 
 	names->clear();
 
-	for (QString it : qres)
-		names->push_back(it.toStdString());
+	for (QVector<QString>::Iterator it = qres.begin(); it != qres.end();
+			it++)
+		names->push_back(it->toStdString());
 
 	return 0;
 }
@@ -240,13 +241,14 @@ Conn::Getdirinfo(QString dir, int64_t rev, int32_t off, int lim,
 
 	info->clear();
 
-	for (QString name : names)
+	for (QVector<QString>::Iterator it = names.begin(); it != names.end();
+			it++)
 	{
 		FileInfo* fp = 0;
 
-		err = Statinfo(rev, dir + name, &fp);
+		err = Statinfo(rev, dir + *it, &fp);
 		if (err && !fp)
-			fp = new FileInfo(name, 0, 0, false, false);
+			fp = new FileInfo(*it, 0, 0, false, false);
 		info->push_back(*fp);
 		delete fp;
 	}
@@ -267,8 +269,9 @@ Conn::Getdirinfo(std::string dir, int64_t rev, int32_t off, int lim,
 
 	info->clear();
 
-	for (FileInfo it : qinfo)
-		info->push_back(it);
+	for (QVector<FileInfo>::Iterator it = qinfo.begin(); it != qinfo.end();
+			it++)
+		info->push_back(*it);
 
 	return 0;
 }
