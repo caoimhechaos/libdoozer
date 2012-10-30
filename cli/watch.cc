@@ -56,6 +56,6 @@ void watch(QString glob)
 		std::cout << ev.Path() << " " << ev.Rev() << " set "
 			<< ev.QBody().length() << std::endl
 			<< ev.Body() << std::endl;
-		rev = ev.Rev();
+		rev = ev.Rev() + 1;
 	}
 }
