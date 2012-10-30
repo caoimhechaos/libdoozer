@@ -1,3 +1,9 @@
+libdoozer (0.1.2-1) unstable; urgency=low
+
+  * Better header and library checks (build-file only change)
+
+ -- Caoimhe Chaos <caoimhechaos@protonmail.com>  Tue, 30 Oct 2012 23:39:54 +0100
+
 libdoozer (0.1.1-1) unstable; urgency=low
 
   * Some fixes to make libdoozer work with some irregular code paths in
