@@ -31,6 +31,7 @@
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
 #include <string>
+#include <vector>
 #include <QtCore/QString>
 #include "doozer.h"
 
