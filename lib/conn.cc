@@ -179,7 +179,7 @@ Conn::send(const ::google::protobuf::Message& msg)
 Error*
 Conn::recv(::google::protobuf::Message* msg)
 {
-	if (!conn_->waitForReadyRead(30000))
+	if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(30000))
 		return new Error(QString("Timed out waiting for response"));
 	QByteArray buf = conn_->read(4);
 	uint32_t* lenp;
@@ -192,12 +192,18 @@ Conn::recv(::google::protobuf::Message* msg)
 	len = ntohl(*lenp);
 	msg->Clear();
 
-	buf = conn_->read(len);
-	if (buf.length() != len)
-		return new Error(conn_->errorString());
+	if (len > 0)
+	{
+		if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(30000))
+			return new Error(QString("Timed out waiting for response"));
 
-	if (!msg->ParseFromArray(buf.data(), buf.length()))
-		return new Error(QString("Error parsing message"));
+		buf = conn_->read(len);
+		if (buf.length() != len)
+			return new Error(conn_->errorString());
+
+		if (!msg->ParseFromArray(buf.data(), buf.length()))
+			return new Error(QString("Error parsing message"));
+	}
 
 	return 0;
 }
