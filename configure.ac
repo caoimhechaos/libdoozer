@@ -51,6 +51,10 @@ GLOG_LIBS=""
 GTEST_LIBS=""
 QT_LIBS=""
 QT_SUBDIR=""
+AC_CHECK_LIB([pthread], [pthread_once], [
+	      AC_LIBS="$AC_LIBS -lpthread"
+	      LIBS="$LIBS $AC_LIBS"
+	      ])
 AC_CHECK_LIB([protobuf], [main], [PROTO_LIBS="-lprotobuf"],
 	AC_ERROR([libprotobuf is required]))
 AC_CHECK_LIB([gtest_main], [main], [GTEST_LIBS="$GTEST_LIBS -lgtest_main"])
@@ -71,7 +75,8 @@ AC_SUBST(AC_LIBS)
 AC_SUBST(LIBS)
 
 # Checks for header files.
-AC_CHECK_HEADERS([QtNetwork/QTcpSocket])
+AC_CHECK_HEADERS([QtNetwork/QTcpSocket QtCore/QString], [],
+		 [AC_ERROR([QT headers missing])])
 
 # Checks for typedefs, structures, and compiler characteristics.
 
