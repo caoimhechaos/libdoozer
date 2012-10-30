@@ -29,6 +29,7 @@
 
 #include <QtCore/QString>
 #include <vector>
+#include <stdint.h>
 #include "doozer.h"
 #include <iostream>
 
