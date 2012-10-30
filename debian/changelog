@@ -1,3 +1,10 @@
+libdoozer (0.1.1-1) unstable; urgency=low
+
+  * Some fixes to make libdoozer work with some irregular code paths in
+    doozerd
+
+ -- Caoimhe Chaos <caoimhechaos@protonmail.com>  Tue, 30 Oct 2012 22:39:04 +0100
+
 libdoozer (0.1-1) unstable; urgency=low
 
   * Initial release
