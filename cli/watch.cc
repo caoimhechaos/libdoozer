@@ -44,6 +44,9 @@ void watch(QString glob)
 		return;
 	}
 
+	// We don't want to be interrupted while waiting.
+	conn->SetTimeout(-1);
+
 	for (;;)
 	{
 		err = conn->Wait(glob, rev, &ev);
