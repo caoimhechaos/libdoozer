@@ -59,9 +59,6 @@ AC_CHECK_LIB([protobuf], [main], [PROTO_LIBS="-lprotobuf"],
 	AC_ERROR([libprotobuf is required]))
 AC_CHECK_LIB([gtest_main], [main], [GTEST_LIBS="$GTEST_LIBS -lgtest_main"])
 AC_CHECK_LIB([gtest], [main], [GTEST_LIBS="$GTEST_LIBS -lgtest"])
-AC_CHECK_LIB([glog], [main],
-	[GLOG_LIBS="$GLOG_LIBS -lglog"],
-	AC_ERROR([libglog is required]))
 AC_CHECK_LIB([QtNetwork], [main],
 	[QT_LIBS="$QT_LIBS -lQtNetwork"])
 AC_CHECK_LIB([QtCore], [main],

@@ -32,7 +32,6 @@
 #endif /* HAVE_CONFIG_H */
 #include <QtCore/QString>
 #include <QtCore/QScopedPointer>
-#include <glog/logging.h>
 
 #include <iostream>
 #include <string>
@@ -45,8 +44,6 @@ using doozer::Error;
 
 int main(int argc, char** argv)
 {
-	google::InitGoogleLogging(argv[0]);
-
 	// Get default parameters from the environment.
 	QScopedPointer<Conn> c(new Conn());
 	Error* err;
@@ -54,8 +51,8 @@ int main(int argc, char** argv)
 	if (!c->IsValid())
 	{
 		err = c->GetError();
-		LOG(ERROR) << "Unable to connect to Doozer: "
-			<< err->ToString();
+		std::cerr << "Unable to connect to Doozer: "
+			<< err->ToString() << std::endl;
 		delete err;
 		return 1;
 	}
@@ -63,13 +60,13 @@ int main(int argc, char** argv)
 	err = c->Nop();
 	if (err)
 	{
-		LOG(ERROR) << "Unable to connect to Doozer: "
-			<< err->ToString();
+		std::cerr << "Unable to connect to Doozer: "
+			<< err->ToString() << std::endl;
 		delete err;
 		return 1;
 	}
 	else
-		LOG(INFO) << "Ping successful.";
+		std::cout << "Ping successful." << std::endl;
 
 	return 0;
 }
