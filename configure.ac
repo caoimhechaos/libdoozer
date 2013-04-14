@@ -79,5 +79,5 @@ AC_CHECK_HEADERS([QtNetwork/QTcpSocket QtCore/QString], [],
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile lib/Makefile cli/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile cli/Makefile nagios/Makefile])
 AC_OUTPUT

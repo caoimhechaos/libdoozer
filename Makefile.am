@@ -1,2 +1,2 @@
 include_HEADERS=	doozer.h
-SUBDIRS=		lib cli
+SUBDIRS=		lib cli nagios
