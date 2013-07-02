@@ -38,6 +38,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <cstdlib>
 
 #include <vector>
 #include "doozer.h"
@@ -53,9 +54,10 @@ int main(int argc, char** argv)
 	clock_t begin = clock();
 	QScopedPointer<Conn> c;
 	int idx;
+	int timeout = 0;
 	string doozer_uri, doozer_boot_uri;
 
-	while ((idx = getopt(argc, argv, "a:b:")) != -1)
+	while ((idx = getopt(argc, argv, "a:b:t:")) != -1)
 	{
 		switch (idx)
 		{
@@ -65,6 +67,9 @@ int main(int argc, char** argv)
 			case 'b':
 				doozer_boot_uri = string(optarg);
 				break;
+			case 't':
+				timeout = atoi(optarg);
+				break;
 			default:
 				std::cerr << "Usage: check_doozer "
 					"[-a <uri> [-b <boot_uri>]]"
@@ -72,7 +77,9 @@ int main(int argc, char** argv)
 					<< " -a <uri>: Doozer URI to "
 					<< "connect to" << std::endl
 					<< " -b <boot_uri>: Boot URI to "
-					<< "resolve cluster names"
+					<< "resolve cluster names" << std::endl
+					<< " -t <timeout>: Set a timeout for "
+					   "the check to <timeout> seconds"
 					<< std::endl;
 				return 1;
 		}
@@ -92,6 +99,9 @@ int main(int argc, char** argv)
 		delete err;
 		return 2;
 	}
+
+	if (timeout)
+		c->SetTimeout(timeout);
 
 	err = c->Nop();
 	if (err)
