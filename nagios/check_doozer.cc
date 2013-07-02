@@ -74,6 +74,7 @@ int main(int argc, char** argv)
 					<< " -b <boot_uri>: Boot URI to "
 					<< "resolve cluster names"
 					<< std::endl;
+				return 1;
 		}
 	}
 
