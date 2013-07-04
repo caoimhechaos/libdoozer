@@ -1,3 +1,9 @@
+libdoozer (0.1.5-1) unstable; urgency=low
+
+  * Get rid of the warnings for not using QtCoreApplication etc.
+
+ -- Caoimhe Chaos <caoimhechaos@protonmail.com>  Fri, 05 Jul 2013 00:38:48 +0200
+
 libdoozer (0.1.4-1) unstable; urgency=low
 
   * Add a command line flag for the timeout to the nagios check plugin
