@@ -32,6 +32,7 @@
 #endif /* HAVE_CONFIG_H */
 #include <QtCore/QString>
 #include <QtCore/QScopedPointer>
+#include <QtCore/QCoreApplication>
 
 #include <unistd.h>
 
@@ -51,6 +52,7 @@ using std::string;
 int main(int argc, char** argv)
 {
 	// Get default parameters from the environment.
+	QCoreApplication a(argc, argv);
 	clock_t begin = clock();
 	QScopedPointer<Conn> c;
 	int idx;

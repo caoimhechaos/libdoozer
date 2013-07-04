@@ -84,7 +84,6 @@ Conn::Conn(QString uri, QString boot_uri)
 Conn::~Conn()
 {
 	conn_->disconnectFromHost();
-	conn_->waitForDisconnected();
 	conn_->deleteLater();
 }
 
@@ -149,7 +148,6 @@ Conn::init(QString uri, QString buri)
 		if (error_)
 		{
 			conn_->disconnectFromHost();
-			conn_->waitForDisconnected();
 			conn_->deleteLater();
 			return;
 		}
