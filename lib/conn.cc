@@ -179,7 +179,8 @@ Error*
 Conn::recv(::google::protobuf::Message* msg)
 {
 	if (!conn_->bytesAvailable() && !conn_->waitForReadyRead(timeout_))
-		return new Error(QString("Timed out waiting for response"));
+		return new Error(QString("Timed out waiting for response (") +
+				conn_->errorString() + QString(")"));
 	QByteArray buf = conn_->read(4);
 	uint32_t* lenp;
 	uint32_t len;
@@ -196,7 +197,8 @@ Conn::recv(::google::protobuf::Message* msg)
 		if (!conn_->bytesAvailable() &&
 				!conn_->waitForReadyRead(timeout_))
 			return new Error(QString("Timed out waiting for "
-						"response"));
+						"response (") +
+					conn_->errorString() + QString(")"));
 
 		buf = conn_->read(len);
 		if (buf.length() != len)
